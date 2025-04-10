@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "shader.h"
+#include "stb_image.h"
 
 //forward declare/prototype for window resizing
 void framebuffer_size_callback(GLFWwindow* widnow, int width, int height);
@@ -81,8 +82,6 @@ int main() {
 	
 
 
-
-
 	
 	//                                                       misc
 
@@ -96,9 +95,10 @@ int main() {
 
 	//vertex data
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+		0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
 	};
 
 
@@ -140,10 +140,10 @@ int main() {
 	//                                                         ebo
 	// we use EBO (element array buffer) to avoid redundancy and vertex duplication
 	
-	//unsigned int EBO;
-	//glGenBuffers(1, &EBO); // create buffer EBO
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //GL_ELEMENT_ARRAY_BUFFER for ebo (element  buffer object)
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // type buffer, size, data, type of usage (static)
+	unsigned int EBO;
+	glGenBuffers(1, &EBO); // create buffer EBO
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //GL_ELEMENT_ARRAY_BUFFER for ebo (element  buffer object)
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // type buffer, size, data, type of usage (static)
 
 
 	//RELATION BETWEEN VBO-VAO-EBO:
@@ -206,11 +206,13 @@ int main() {
 	//glDeleteShader(fragmentShader);
 	// sets out how to interpet the data of the vertex data as so:
 	// 1. index (0), 2. size specifier (3 as in vec3), 3. type (float), 4. normalized (no), 
-	// 5. space between attributes (3f since 3 point array of float), 6. offset from beginning (0)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	// 5. space between attributes (3f since 3 point array of float), 6. offset from beginning (0 times size of type)
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+	glEnableVertexAttribArray(2);
 
 	//VERTEX - first step, processes vertexes individually, responsible for coordination and passes attributes to fragment shader
 	//FRAGMENT - handles colors of pixels, runs once for each pixel drawn (not hidden ones)
@@ -219,11 +221,82 @@ int main() {
 
 
 
+	//                                                     image
+	
+
+	
+
+	//creating id for the image
+	unsigned int texture1, texture2;
+	glGenTextures(1, &texture1); // takes the amount of images to generate and where to store them (int array type)
+	glActiveTexture(GL_TEXTURE1); // activate texture unit 0 
+	glBindTexture(GL_TEXTURE_2D, texture1); //bind texture
+
+
+	//wrapping/filtering options
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height, nrChannels;
+	unsigned char *data = stbi_load("container.jpg", &width, &height, &nrChannels, 0); // takes image location, width, height and color channels
+	if (data) {
+		//generate image data:
+		//parameters: 1. texture target (channel 2d), 2. mipmap level (0), 3. store texture format (with rgb values here)
+		// 4-5. wid-hi 6. (0 always, legacy thingy) 7-8. data type of source image (pass current stoired values) 9. image data
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else 
+	{
+		
+		std::cout << "failed to load texture " << std::endl;
+	}
+
+
+	stbi_image_free(data); //free image memory now that its generated
+	stbi_set_flip_vertically_on_load(true);
+	glGenTextures(1, &texture2);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, texture2);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	data = stbi_load("awesomeface.png", &width, &height, &nrChannels, 0);
+	if (data) {
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "failed to load texture " << std::endl;
+	}
+
+
+
+	stbi_image_free(data); //free image memory now that its generated
+
+	
+
+	
+
+
+
+
 	//					                  				render loop
 	 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe mode
 
-	Shader ourShader("vertex.vs", "fragment.fs");
+	Shader ourShader("vertex.vs", "fragment.fss");
+
+	ourShader.use();
+	ourShader.setInt("texture2", 1);
 
 	float offset = 0.5f;
 	
@@ -239,9 +312,17 @@ int main() {
 		//glUseProgram(shaderProgram);
 		//glBindVertexArray(VAO);
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+
 		ourShader.use();
-		//ourShader.setFloat("xOffset", offset);
 		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		//ourShader.setFloat("xOffset", offset);
+		//glBindVertexArray(VAO);
 
 		//pulsing green color
 		//float timeValue = glfwGetTime();
@@ -255,7 +336,7 @@ int main() {
 
 		//array drawing method
 
-		glDrawArrays(GL_TRIANGLES, 0, 3); // drawing mode, starting index, amount of vertices
+		//glDrawArrays(GL_TRIANGLES, 0, 3); // drawing mode, starting index, amount of vertices
 
 
 		//swaps front and back buffer to prevent artifacts
