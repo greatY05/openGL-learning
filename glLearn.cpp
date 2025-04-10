@@ -1,6 +1,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include "shader.h"
 
 //forward declare/prototype for window resizing
 void framebuffer_size_callback(GLFWwindow* widnow, int width, int height);
@@ -23,19 +24,26 @@ void processInput(GLFWwindow* window) {
 }
 
 //vertex shader source code saved in a c style string
-const char *vertexShaderSource = "#version 330 core\n"
+const char *vertexShaderSource = 
+"#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec3 aColor;\n"
+"out vec3 ourColor;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = vec4(aPos, 1.0);\n"
+"   ourColor = aColor;\n"
 "}\0";
 
 
-const char* fragmentShaderSource = "#version 330 core\n"
+const char* fragmentShaderSource = 
+"#version 330 core\n"
 "out vec4 FragColor;\n"
+"in vec3 ourColor;\n"
+//"uniform vec4 ourColor;\n"
 "void main() {\n"
-"FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-"}\0";
+"   FragColor = vec4(ourColor, 1.0f);\n"
+"}\n\0";
 
 
 
@@ -77,15 +85,20 @@ int main() {
 
 	
 	//                                                       misc
+
+
+	
+
+
+	/*int nrAttributes;
+	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+	std::cout << "maximum nr of vertex attributes supported: " << nrAttributes << std::endl;*/
+
 	//vertex data
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f,
-
-		0.0f, -0.5f, 0.0f,  // left
-		0.9f, -0.5f, 0.0f,  // right
-		0.45f, 0.5f, 0.0f   // top 
+		-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
+		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
 	};
 
 
@@ -108,8 +121,10 @@ int main() {
 	//binds to object buffer we created above to our VBO buffer type
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	//copies user defined data to our current buffer. takes buffer type, size, data, and managing mode
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	////enables vertex attributes so line above works, since its disabled by default
+	//glEnableVertexAttribArray(0);
 
 	//                                                         vao
 	unsigned int VAO;
@@ -120,14 +135,15 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 	//set our vertex attribute pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
 	//                                                         ebo
 	// we use EBO (element array buffer) to avoid redundancy and vertex duplication
-	unsigned int EBO;
-	glGenBuffers(1, &EBO); // create buffer EBO
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //GL_ELEMENT_ARRAY_BUFFER for ebo (element  buffer object)
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // type buffer, size, data, type of usage (static)
+	
+	//unsigned int EBO;
+	//glGenBuffers(1, &EBO); // create buffer EBO
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); //GL_ELEMENT_ARRAY_BUFFER for ebo (element  buffer object)
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); // type buffer, size, data, type of usage (static)
 
 
 	//RELATION BETWEEN VBO-VAO-EBO:
@@ -140,52 +156,61 @@ int main() {
 
 	//                                                       shaders
 	//vertex shader
-	//using glCreateShader to create a shader we want (here a vertex shader)
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	//attaching our source code from above Main() and compiling the shader
-	//glShaderSource - gets the shader, the element in it, hte source code, and total length of it
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
+	////using glCreateShader to create a shader we want (here a vertex shader)
+	//unsigned int vertexShader;
+	//vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	////attaching our source code from above Main() and compiling the shader
+	////glShaderSource - gets the shader, the element in it, hte source code, and total length of it
+	//glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	//glCompileShader(vertexShader);
 
-	//fragment shader
-	//similar to vertex, we create a buffer, create a type buffer fragment onto it, assign it the source code and compilei t
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	///debugging to see if theres any compile time errors
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
+	////fragment shader
+	////similar to vertex, we create a buffer, create a type buffer fragment onto it, assign it the source code and compilei t
+	//unsigned int fragmentShader;
+	//fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	//glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	//glCompileShader(fragmentShader);
+	/////debugging to see if theres any compile time errors
+	//int success;
+	//char infoLog[512];
+	//glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	//if (!success) {
+	//	glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+	//	std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	//}
 
-	//                                          creating the shader program
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
+	////                                          creating the shader program
+	//unsigned int shaderProgram;
+	//shaderProgram = glCreateProgram();
+
+	
+	//float timeValue = glfwGetTime();
+	//float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+	//int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor"); // finds the location of "ourColor" form the fragment shader
+	//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f); //sets the value of the shader (ourColor in tthis case)
+
+
 	//attach fragment, vertex and link them with linker
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	//compile time checking for errors:
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success); // querys the shader about object parameters (link status of the shader program)
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog); //returns info log about shader,able to check compile errors
-	}
-	//sets shader as the current program to draw on
-	glUseProgram(shaderProgram);
-	//deleting the shaders now that we linked them
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	//glAttachShader(shaderProgram, vertexShader);
+	//glAttachShader(shaderProgram, fragmentShader);
+	//glLinkProgram(shaderProgram);
+	////compile time checking for errors:
+	//glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success); // querys the shader about object parameters (link status of the shader program)
+	//if (!success) {
+	//	glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog); //returns info log about shader,able to check compile errors
+	//}
+	////sets shader as the current program to draw on
+	////glUseProgram(shaderProgram);
+	////deleting the shaders now that we linked them
+	//glDeleteShader(vertexShader);
+	//glDeleteShader(fragmentShader);
 	// sets out how to interpet the data of the vertex data as so:
 	// 1. index (0), 2. size specifier (3 as in vec3), 3. type (float), 4. normalized (no), 
 	// 5. space between attributes (3f since 3 point array of float), 6. offset from beginning (0)
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	//enables vertex attributes so line above works, since its disabled by default
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	//VERTEX - first step, processes vertexes individually, responsible for coordination and passes attributes to fragment shader
 	//FRAGMENT - handles colors of pixels, runs once for each pixel drawn (not hidden ones)
@@ -194,31 +219,43 @@ int main() {
 
 
 
-
-
 	//					                  				render loop
 	 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // wireframe mode
+
+	Shader ourShader("vertex.vs", "fragment.fs");
+
+	float offset = 0.5f;
 	
 	//starts the loop, while we dont need to close it - run
 	while (!glfwWindowShouldClose(window)) {
 		//calls process inputs function
 		processInput(window);
-
+		//clear colorbuffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//draw the triangle
-		glUseProgram(shaderProgram);
+		//draw the triangle/use ou shader program
+		//glUseProgram(shaderProgram);
+		//glBindVertexArray(VAO);
+
+		ourShader.use();
+		//ourShader.setFloat("xOffset", offset);
 		glBindVertexArray(VAO);
 
+		//pulsing green color
+		//float timeValue = glfwGetTime();
+		//float greenValue = sin(timeValue) / 2.0f + 0.5f;
+		//int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor"); // location of ourColor
+		//glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+
 		//elemement drawing method
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); //drawing mode, number of indices, type, starting index
 
 		//array drawing method
-		glDrawArrays(GL_TRIANGLES, 0, 6); // drawing mode, starting index, amount of vertices
-		glBindVertexArray(0);
+
+		glDrawArrays(GL_TRIANGLES, 0, 3); // drawing mode, starting index, amount of vertices
 
 
 		//swaps front and back buffer to prevent artifacts
@@ -229,7 +266,7 @@ int main() {
 
 	// STATE MACHINE:
 	// glBindBuffer and glUseProgram dont immidately draw, but set the internal state
-	// after that, commands like glDrawArray use whatever state said functions set for us
+	// after that, commands like glDrawArray use whatever state said functions chan
 
 
 	//														end
