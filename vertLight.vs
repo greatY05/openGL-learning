@@ -16,8 +16,8 @@ out vec3 LightPos;
 void main()
 {
     FragPos = vec3(view * model * vec4(aPos, 1.0));
-    //Normal = aNormal;
-    Normal = mat3(transpose(inverse(view * model))) * aNormal;//  - multiply the normal vector by a normal matrix - important if we work in non uniform but not efficient at all.
+    Normal = aNormal;
+    //Normal = mat3(transpose(inverse(view * model))) * aNormal;//  - multiply the normal vector by a normal matrix - important if we work in non uniform but not efficient at all.
 
     LightPos = vec3(view * vec4(lightPos, 1.0));
     gl_Position = projection * view * model * vec4(aPos, 1.0);
