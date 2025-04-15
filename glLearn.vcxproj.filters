@@ -49,5 +49,15 @@
     <None Include="vertex.vs">
       <Filter>shaders</Filter>
     </None>
+    <None Include="fragLight.fss">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="vertLight.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="fragLightSource.fss">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="vertLightCube.vs" />
   </ItemGroup>
 </Project>
