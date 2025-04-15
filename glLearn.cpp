@@ -186,7 +186,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
-		//lightPos = glm::vec3(sin(10 * static_cast<float>(glfwGetTime())/2), cos(10 * static_cast<float>(glfwGetTime()) / 2), sin(10 * static_cast<float>(glfwGetTime()) / 2));
+		lightPos = glm::vec3(sin(10 * static_cast<float>(glfwGetTime())/2), cos(10 * static_cast<float>(glfwGetTime()) / 2), sin(10 * static_cast<float>(glfwGetTime()) / 2));
 
 
 		//set uniforms for cube
