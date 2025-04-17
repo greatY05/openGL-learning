@@ -138,7 +138,12 @@ int main() {
 	glm::vec3(-1.3f,  1.0f, -1.5f)
 	};
 
-
+	glm::vec3 pointLightPositions[] = {
+	glm::vec3(0.7f,  0.2f,  2.0f),
+	glm::vec3(2.3f, -3.3f, -4.0f),
+	glm::vec3(-4.0f,  2.0f, -12.0f),
+	glm::vec3(0.0f,  0.0f, -3.0f)
+	};
 
 	unsigned int indices[] = {
 		0,1,3, //triangle 1
@@ -193,7 +198,7 @@ int main() {
 		lastFrame = currentFrame;
 		//input processing + buffer clearing/rendering
 		processInput(window);
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
@@ -205,12 +210,39 @@ int main() {
 		//lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
 		lightingShader.setVec3("viewPos", camera.Position);
 		
-		lightingShader.setVec3("light.position", camera.Position);
-		lightingShader.setVec3("light.direction", camera.Front);
-		//flashlight 
-		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
-		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
+
+		// directional light
+		lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		lightingShader.setVec3("dirLight.ambient", 0.7f, 0.7f, 0.7f);
+		lightingShader.setVec3("dirLight.diffuse", 0.3f, 0.3f, 0.3f);
+		lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+		// point lights
+		for (int i = 0; i < 4; i++) {
+			std::string baseStr = "pointLights[" + std::to_string(i) + "]";
+
+			lightingShader.setVec3(baseStr + ".position", pointLightPositions[i]);
+			lightingShader.setVec3(baseStr + ".ambient", 0.4f, 0.7f, 0.7f);
+			lightingShader.setVec3(baseStr + ".diffuse", 0.1f, 0.9f, 0.1f);
+			lightingShader.setVec3(baseStr + ".specular", 1.0f, 1.0f, 1.0f);
+			lightingShader.setFloat(baseStr + ".constant", 1.0f);
+			lightingShader.setFloat(baseStr + ".linear", 0.09f);
+			lightingShader.setFloat(baseStr + ".quadratic", 0.032f);
+		}
+
+		// spotLight
+		lightingShader.setVec3("spotLight.position", camera.Position);
+		lightingShader.setVec3("spotLight.direction", camera.Front);
+		lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		lightingShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		lightingShader.setVec3("spotLight.specular", 0.0f, 1.0f, 0.0f);
+		lightingShader.setFloat("spotLight.constant", 1.0f);
+		lightingShader.setFloat("spotLight.linear", 0.09f);
+		lightingShader.setFloat("spotLight.quadratic", 0.032f);
+		lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+		
+		
 		//glm::vec3 lightColor;
 		//lightColor.x = sin(glfwGetTime() * 2.0f);
 		//lightColor.y = sin(glfwGetTime() * 0.7f);
@@ -257,6 +289,7 @@ int main() {
 
 
 		//drawing the 10 cubes
+		glBindVertexArray(cubeVAO);
 		for (unsigned int i = 0; i < 10; i++) {
 			glm::mat4 model = glm::mat4(1.0f);
 			model = glm::translate(model, cubePositions[i]);
@@ -266,25 +299,27 @@ int main() {
 			lightingShader.setMat4("model", model);
 		
 			//draw cube
-			glBindVertexArray(cubeVAO);
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
 
 
 
 
-		////set up second cube
-		//lightCubeShader.use();
-		//lightCubeShader.setMat4("projection", projection);
-		//lightCubeShader.setMat4("view", view);
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, lightPos);
-		//model = glm::scale(model, glm::vec3(0.2f));
-		//lightCubeShader.setMat4("model", model);
-		////draw second cube
-		//glBindVertexArray(lightCubeVAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 36);
-		
+		// also draw the lamp object(s)
+		lightCubeShader.use();
+		lightCubeShader.setMat4("projection", projection);
+		lightCubeShader.setMat4("view", view);
+
+		// we now draw as many light bulbs as we have point lights.
+		glBindVertexArray(lightCubeVAO);
+		for (unsigned int i = 0; i < 4; i++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, pointLightPositions[i]);
+			model = glm::scale(model, glm::vec3(0.2f)); // Make it a smaller cube
+			lightCubeShader.setMat4("model", model);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 		
 
 
