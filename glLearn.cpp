@@ -197,35 +197,40 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		
-		lightPos = glm::vec3(sin(10 * static_cast<float>(glfwGetTime())/4), cos(10 * static_cast<float>(glfwGetTime()) / 4), sin(10 * static_cast<float>(glfwGetTime()) / 4));
+		//lightPos = glm::vec3(sin(10 * static_cast<float>(glfwGetTime())/4), cos(10 * static_cast<float>(glfwGetTime()) / 4), sin(10 * static_cast<float>(glfwGetTime()) / 4));
 		//lightPos.x = (sin(10 * static_cast<float>(glfwGetTime() / 2)));
 
 		//set uniforms for cube
 		lightingShader.use();
 		//lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
-		lightingShader.setVec3("light.position", lightPos);
 		lightingShader.setVec3("viewPos", camera.Position);
-
+		
+		lightingShader.setVec3("light.position", camera.Position);
+		lightingShader.setVec3("light.direction", camera.Front);
+		//flashlight 
+		lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+		lightingShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
 
 		//glm::vec3 lightColor;
 		//lightColor.x = sin(glfwGetTime() * 2.0f);
 		//lightColor.y = sin(glfwGetTime() * 0.7f);
 		//lightColor.z = sin(glfwGetTime() * 1.3f);
 
-		glm::vec3 diffuseColor = glm::vec3(0.1);
 		glm::vec3 ambientColor = glm::vec3(0.2f);
-		glm::vec3 specularColor = glm::vec3(0.8f);
+		glm::vec3 diffuseColor = glm::vec3(0.5f);
+		glm::vec3 specularColor = glm::vec3(1.0f);
 
-		lightingShader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
-		lightingShader.setVec3("light.diffuse", glm::vec3(0.8, 0.8, 0.8) +diffuseColor); // darken diffuse light a bit
+		lightingShader.setVec3("light.ambient", ambientColor);
+		lightingShader.setVec3("light.diffuse", diffuseColor); // darken diffuse light a bit
 		lightingShader.setVec3("light.specular", specularColor);
+		lightingShader.setFloat("light.constant", 1.0f);
+		lightingShader.setFloat("light.linear", 0.09f);
+		lightingShader.setFloat("light.quadratic", 0.032f);
 
-		//lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-		//lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-		//lightingShader.setVec3("material.specular", 0.8f, 0.8f, 0.8f);
 		lightingShader.setFloat("material.shininess", 32.0f);
 
 
+		//binding different layers for different lightings
 		lightingShader.setInt("material.diffuse", 0);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
@@ -236,7 +241,7 @@ int main() {
 		glActiveTexture(GL_TEXTURE2);
 		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
-		lightCubeShader.use();
+		lightCubeShader.use(); // quicikly setting the color of the light cube
 		lightCubeShader.setVec3("color", diffuseColor + glm::vec3(0.7f));
 		lightingShader.use();
 
@@ -245,27 +250,40 @@ int main() {
 		glm::mat4 view = camera.GetViewMatrix();
 		lightingShader.setMat4("projection", projection);
 		lightingShader.setMat4("view", view);
-
+		
 		//world transforms
 		glm::mat4 model = glm::mat4(1.0f);
 		lightingShader.setMat4("model", model);
 
-		//draw cube
-		glBindVertexArray(cubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		//drawing the 10 cubes
+		for (unsigned int i = 0; i < 10; i++) {
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			float angle = 20.0f * i;
+			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
+
+			lightingShader.setMat4("model", model);
+		
+			//draw cube
+			glBindVertexArray(cubeVAO);
+			glDrawArrays(GL_TRIANGLES, 0, 36);
+		}
 
 
-		//set up second cube
-		lightCubeShader.use();
-		lightCubeShader.setMat4("projection", projection);
-		lightCubeShader.setMat4("view", view);
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.2f));
-		lightCubeShader.setMat4("model", model);
-		//draw second cube
-		glBindVertexArray(lightCubeVAO);
-		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+		////set up second cube
+		//lightCubeShader.use();
+		//lightCubeShader.setMat4("projection", projection);
+		//lightCubeShader.setMat4("view", view);
+		//model = glm::mat4(1.0f);
+		//model = glm::translate(model, lightPos);
+		//model = glm::scale(model, glm::vec3(0.2f));
+		//lightCubeShader.setMat4("model", model);
+		////draw second cube
+		//glBindVertexArray(lightCubeVAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
 		
 		
 
