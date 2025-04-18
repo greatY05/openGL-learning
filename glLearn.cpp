@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+
+
 //forward declare/prototype for window resizing
 void framebuffer_size_callback(GLFWwindow* widnow, int WIDTH, int HEIGHT);
 //forward declare input processing
