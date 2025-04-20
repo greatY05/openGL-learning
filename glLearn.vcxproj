@@ -159,6 +159,8 @@
     <None Include="fragment.fss" />
     <None Include="modelFrag.frag" />
     <None Include="modelVert.vs" />
+    <None Include="stencilFrag.frag" />
+    <None Include="stencilVert.vs" />
     <None Include="vertex.vs" />
     <None Include="vertLight.vs" />
     <None Include="vertLightCube.vs" />

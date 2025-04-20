@@ -16,6 +16,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="shaders\stencil">
+      <UniqueIdentifier>{18e8db7f-cd1d-4520-9c71-4085794eea86}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -70,6 +73,12 @@
     </None>
     <None Include="modelVert.vs">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="stencilFrag.frag">
+      <Filter>shaders\stencil</Filter>
+    </None>
+    <None Include="stencilVert.vs">
+      <Filter>shaders\stencil</Filter>
     </None>
   </ItemGroup>
 </Project>
