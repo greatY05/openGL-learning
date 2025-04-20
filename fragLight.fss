@@ -103,7 +103,8 @@ void main()
     //vec3 emission = texture(material.emission,TexCoords).rgb * emissionMask;
     //result += emission;
 
-    FragColor = vec4(result, 1.0);
+
+     FragColor = vec4(result, 1.0);
 
 
 } 

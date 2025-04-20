@@ -19,12 +19,13 @@ using namespace std;
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-///                           TO DO: FIX ASSIMP INSTALATNIO
+
 
 //forward declare/prototype for window resizing
 void framebuffer_size_callback(GLFWwindow* widnow, int WIDTH, int HEIGHT);
 //forward declare input processing
 void processInput(GLFWwindow* window);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 //forward declae callback mouse and scroll function 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffsett, double yoffset);
@@ -40,7 +41,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 glm::vec3 lightPos(1.2f, 1.0f, 2.0f); // light source location
-
+bool spotlightActive;
 
 
 static const int WIDTH = 800, HEIGHT = 600;
@@ -81,6 +82,7 @@ int main() {
 
 	
 	//                                                       misc
+	spotlightActive = false;
 	stbi_set_flip_vertically_on_load(true);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glEnable(GL_DEPTH_TEST);
@@ -206,7 +208,7 @@ int main() {
 
 
 	//                                                     render loop
-
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	while (!glfwWindowShouldClose(window)) {
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
@@ -215,26 +217,99 @@ int main() {
 		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		modelShader.use();
+		lightingShader.use();
 
-		// view/projection transformations
+		lightingShader.setVec3("viewPos", camera.Position);
+				
+
+
+		// directional light
+		lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		lightingShader.setVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
+		lightingShader.setVec3("dirLight.diffuse", 0.3f, 0.3f, 0.3f);
+		lightingShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+		// point lights
+		for (int i = 0; i < 4; i++) {
+			std::string baseStr = "pointLights[" + std::to_string(i) + "]";
+
+			lightingShader.setVec3(baseStr + ".position", pointLightPositions[i]);
+			lightingShader.setVec3(baseStr + ".ambient", 0.3f, 0.3f, 0.3f);
+			lightingShader.setVec3(baseStr + ".diffuse", 0.5f, 0.5f, 0.5f);
+			lightingShader.setVec3(baseStr + ".specular", 1.0f, 1.0f, 1.0f);
+			lightingShader.setFloat(baseStr + ".constant", 1.0f);
+			lightingShader.setFloat(baseStr + ".linear", 0.09f);
+			lightingShader.setFloat(baseStr + ".quadratic", 0.032f);
+		}
+
+		// spotLight
+		lightingShader.setVec3("spotLight.position", camera.Position);
+		lightingShader.setVec3("spotLight.direction", camera.Front);
+		if (spotlightActive) {
+			lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+			lightingShader.setVec3("spotLight.diffuse", 0.7f, 0.7f, 0.7f);
+			lightingShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		}
+		else { // turn flashlight off on button press
+			lightingShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+			lightingShader.setVec3("spotLight.diffuse", 0.0f, 0.0f, 0.0f);
+			lightingShader.setVec3("spotLight.specular", 0.0f, 0.0f, 0.0f);
+		}
+			lightingShader.setFloat("spotLight.constant", 1.0f);
+			lightingShader.setFloat("spotLight.linear", 0.09f);
+			lightingShader.setFloat("spotLight.quadratic", 0.032f);
+			lightingShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+			lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+				
+
+
+
+
+		lightingShader.setFloat("material.shininess", 32.0f);
+		//binding different layers for different lightings
+		lightingShader.setInt("material.diffuse", 0);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, diffuseMap);
+		lightingShader.setInt("material.specular", 1);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, specularMap);
+		lightingShader.setInt("material.emission", 2);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
+
+
+
+		//view and projection transforms
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		modelShader.setMat4("projection", projection);
-		modelShader.setMat4("view", view);
+		lightingShader.setMat4("projection", projection);
+		lightingShader.setMat4("view", view);
+				
+		//world transforms
+		glm::mat4 model = glm::mat4(1.0f);
+		lightingShader.setMat4("model", model);
+
+
+
+
+
+
+
 
 
 		//render model!
-		glm::mat4 model = glm::mat4(1.0f);
+		//glm::mat4 model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // set transform to 0
 		model = scale(model, glm::vec3(1.0f, 1.0f, 1.0f)); // scale to to 1
-		modelShader.setMat4("model", model); // pass matrices off shit
-		backpack.Draw(modelShader); // tell model to draw using shit matrices
+		lightingShader.setMat4("model", model); // pass matrices off shit
+		backpack.Draw(lightingShader); // tell model to draw using shit matrices
 
+		glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
 		glfwSetCursorPosCallback(window, mouse_callback);
 		glfwSetScrollCallback(window, scroll_callback);
+		
+		glfwSetKeyCallback(window, key_callback);
 
 
 
@@ -298,8 +373,14 @@ void processInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(DOWN, deltaTime);
 	}
 
-
 }
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	if (key == GLFW_KEY_T && action == GLFW_PRESS) {
+		spotlightActive = !spotlightActive;
+	}
+}
+
 
 float lastX = WIDTH / 2, lastY = HEIGHT / 2; //
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
