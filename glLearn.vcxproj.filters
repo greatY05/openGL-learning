@@ -41,6 +41,12 @@
     <ClInclude Include="camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.fss">
@@ -59,5 +65,11 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="vertLightCube.vs" />
+    <None Include="modelFrag.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="modelVert.vs">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
