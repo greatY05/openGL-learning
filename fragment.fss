@@ -1,15 +1,23 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec3 ourColor;
-in vec3 pos;
-in vec2 TexCoord;
+in vec2 TexCoords;
 
 uniform sampler2D texture1;
-uniform sampler2D texture2;
+
+float near = 0.1;
+float far = 100.0;
+
+float LinearizeDepth(float depth){ // we transform the non linear depth buffer to a linear one
+    float z = depth * 2.0 - 1.0;
+    return (2.0 * near * far) / ( far + near - z*(far-near)); //derived from the projection matrix for non linearizing the depths values
+}
+
 
 void main()
-{
+{    
+    float depth = LinearizeDepth(gl_FragCoord.z) / far;
+    //FragColor = vec4(vec3(depth), 1.0);
+    FragColor = texture(texture1, TexCoords);
 
-    FragColor = mix(texture(texture1, TexCoord), texture(texture2, vec2(TexCoord.x, TexCoord.y)), 0.2);
 }
