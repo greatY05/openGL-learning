@@ -102,6 +102,7 @@ int main() {
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // enable blending
+	glEnable(GL_CULL_FACE);
 
 	/*int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
@@ -122,8 +123,7 @@ int main() {
 	in a counter-clockwise order. This takes some practice, but try visualizing this yourself and see that this
 	is correct.
 */
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+
 	//vertex data
 	float cubeVertices[] = {
 		// Back face
@@ -174,9 +174,9 @@ int main() {
 
 	float planeVertices[] = {
 		// positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
-		 5.0f, -0.6f,  5.0f,  2.0f, 0.0f,
-		-5.0f, -0.6f,  5.0f,  0.0f, 0.0f,
-		-5.0f, -0.6f, -5.0f,  0.0f, 2.0f,
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
 
 		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
 		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
