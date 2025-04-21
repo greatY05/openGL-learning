@@ -119,6 +119,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\yahli\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -138,6 +140,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\yahli\assimp\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
