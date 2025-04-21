@@ -101,7 +101,8 @@ int main() {
 	glDepthFunc(GL_LESS); // always pass the depth test (same effect as glDisable(GL_DEPTH_TEST))
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // enable blending
+
 	/*int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	std::cout << "maximum nr of vertex attributes supported: " << nrAttributes << std::endl;*/
@@ -109,56 +110,73 @@ int main() {
 	Shader lightCubeShader("vertLightCube.vs", "fragLightSource.fss");
 	Shader shader("modelVert.vs", "fragment.fss");
 
+
+
+
+	/*
+	Remember: to specify vertices in a counter-clockwise winding order you need to visualize the triangle
+	as if you're in front of the triangle and from that point of view, is where you set their order.
+
+	To define the order of a triangle on the right side of the cube for example, you'd imagine yourself looking
+	straight at the right side of the cube, and then visualize the triangle and make sure their order is specified
+	in a counter-clockwise order. This takes some practice, but try visualizing this yourself and see that this
+	is correct.
+*/
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 	//vertex data
 	float cubeVertices[] = {
-		// positions          // texture Coords
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		// Back face
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		// Front face
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+		// Left face
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+		// Right face
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+		 // Bottom face
+		 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		  0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+		  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		  0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+		 -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+		 -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+		 // Top face
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		  0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+		  0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+		 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
 	};
+	
+
+
 	float planeVertices[] = {
 		// positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
-		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
-		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
-		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+		 5.0f, -0.6f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.6f,  5.0f,  0.0f, 0.0f,
+		-5.0f, -0.6f, -5.0f,  0.0f, 2.0f,
 
 		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
 		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
@@ -311,6 +329,8 @@ int main() {
 			shader.setMat4("model", model);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
+
+
 		// 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.
 		// Because the stencil buffer is now filled with several 1s. The parts of the buffer that are 1 are not drawn, thus only drawing 
 		// the objects' size differences, making it look like borders.
