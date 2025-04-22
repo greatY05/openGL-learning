@@ -88,11 +88,11 @@ int main() {
 	
 
 
-	glEnable(GL_DEPTH_TEST); // enable depth testing
-	glDepthFunc(GL_LESS); // set type of testing (less)
-	glEnable(GL_STENCIL_TEST); // enable stencil test
-	glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // enable stencil test function check if not equal
-	glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // 1. if failed stencil test 2. if failed depth test 3. if succeeded depth test
+	//glEnable(GL_DEPTH_TEST); // enable depth testing
+	//glDepthFunc(GL_LESS); // set type of testing (less)
+	//glEnable(GL_STENCIL_TEST); // enable stencil test
+	//glStencilFunc(GL_NOTEQUAL, 1, 0xFF); // enable stencil test function check if not equal
+	//glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // 1. if failed stencil test 2. if failed depth test 3. if succeeded depth test
 	//                                                       misc
 	spotlightActive = false;
 	//stbi_set_flip_vertically_on_load(true);
@@ -102,14 +102,14 @@ int main() {
 	glEnable(GL_STENCIL_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // enable blending
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 
 	/*int nrAttributes;
 	glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
 	std::cout << "maximum nr of vertex attributes supported: " << nrAttributes << std::endl;*/
-	Shader lightingShader("vertLight.vs", "fragLight.fss");
-	Shader lightCubeShader("vertLightCube.vs", "fragLightSource.fss");
-	Shader shader("modelVert.vs", "fragment.fss");
+	//Shader lightingShader("vertLight.vs", "fragLight.fss");
+	//Shader lightCubeShader("vertLightCube.vs", "fragLightSource.fss");
+	Shader shader("shader.vs", "shader.frag");
 
 
 
@@ -169,9 +169,6 @@ int main() {
 		 -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
 		 -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
 	};
-	
-
-
 	float planeVertices[] = {
 		// positions          // texture Coords (note we set these higher than 1 (together with GL_REPEAT as texture wrapping mode). this will cause the floor texture to repeat)
 		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
@@ -202,6 +199,61 @@ int main() {
 		glm::vec3(0.5f, 0.0f, -0.6f)
 	};
 
+	float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates. NOTE that this plane is now much smaller and at the top of the screen
+		// positions   // texCoords
+		-0.3f,  1.0f,  0.0f, 1.0f,
+		-0.3f,  0.7f,  0.0f, 0.0f,
+		 0.3f,  0.7f,  1.0f, 0.0f,
+
+		-0.3f,  1.0f,  0.0f, 1.0f,
+		 0.3f,  0.7f,  1.0f, 0.0f,
+		 0.3f,  1.0f,  1.0f, 1.0f
+	};
+
+	// 1. create and bind a framebuffer 2. create the texture image we're gonna draw and keep data uninitialized 3. create renderbuffer for both depth and stencil buffers
+	// 4. attach renderbuffer to the framebuffer 5. if statement check to see if framebuffer successful complete 7. unbind the framebuffer 
+	// 8. create create VAO for the screen quad
+	unsigned int framebuffer;
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+	unsigned int textureColorbuffer;
+	glGenTextures(1, &textureColorbuffer);
+	glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 800, 600, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+
+	unsigned int rbo;
+	glGenRenderbuffers(1, &rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, WIDTH, HEIGHT);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	
+	Shader screenShader("normal.vs", "normal.frag");
+
+	unsigned int quadVAO, quadVBO;
+	glGenVertexArrays(1, &quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glBindVertexArray(quadVAO);
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glBindVertexArray(0);
+
+
+
+	//
     unsigned int transparentVAO, transparentVBO;
     glGenVertexArrays(1, &transparentVAO);
     glGenBuffers(1, &transparentVBO);
@@ -242,7 +294,7 @@ int main() {
 	// load textures
 	// -------------
 	unsigned int grassTexture = loadTexture("grass.png");
-	unsigned int cubeTexture = loadTexture("marble.jpg");
+	unsigned int cubeTexture = loadTexture("container.jpg");
 	unsigned int floorTexture = loadTexture("metal.png");
 	unsigned int windowTexture = loadTexture("window.png");
 
@@ -251,11 +303,14 @@ int main() {
 	shader.use();
 	shader.setInt("texture1", 0);
 
+	screenShader.use();
+	screenShader.setInt("screenTexture", 0);
 	// render loop
 	// -----------
 
 	Shader shaderSingleColor("stencilVert.vs", "stencilFrag.frag");
-	
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -267,39 +322,17 @@ int main() {
 		// input
 		// -----
 		processInput(window);
-
-		// render
-		// ------
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // don't forget to clear the stencil buffer!
-
-		// set uniforms
-		shaderSingleColor.use();
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
-		shaderSingleColor.setMat4("view", view);
-		shaderSingleColor.setMat4("projection", projection);
-
+		
 		shader.use();
+		glm::mat4 model = glm::mat4(1.0f);
+		camera.Yaw += 180.0f; // rotate the camera's yaw 180 degrees around
+		camera.ProcessMouseMovement(0, 0, false); // call this to make sure it updates its camera vectors, note that we disable pitch constrains for this specific case (otherwise we can't reverse camera's pitch values)
+		glm::mat4 view = camera.GetViewMatrix();
+		camera.Yaw -= 180.0f; // reset it back to its original orientation
+		camera.ProcessMouseMovement(0, 0, true);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
-
-		// draw floor as normal, but don't write the floor to the stencil buffer, we only care about the containers. We set its mask to 0x00 to not write to the stencil buffer.
-		glStencilMask(0x00);
-		// floor
-		glBindVertexArray(planeVAO);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
-		shader.setMat4("model", glm::mat4(1.0f));
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		glBindVertexArray(0);
-
-
-
-		// 1st. render pass, draw objects as normal, writing to the stencil buffer
-		// --------------------------------------------------------------------
-		glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass stencil
-		glStencilMask(0xFF); // enable writing to stencil buffer
 		// cubes
 		glBindVertexArray(cubeVAO);
 		glActiveTexture(GL_TEXTURE0);
@@ -311,24 +344,113 @@ int main() {
 		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
 		shader.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// floor
+		glBindVertexArray(planeVAO);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		shader.setMat4("model", glm::mat4(1.0f));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
 
-		 //grass
-		std::map<float, glm::vec3> sorted;
-		for (unsigned int i = 0; i < transparents.size(); i++)
-		{
-			float distance = glm::length(camera.Position - transparents[i]);
-			sorted[distance] = transparents[i];
-		}
-		
-		glBindVertexArray(transparentVAO);
-		glBindTexture(GL_TEXTURE_2D, windowTexture);
-		for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
-		{
-			model = glm::mat4(1.0f);
-			model = glm::translate(model, it->second);
-			shader.setMat4("model", model);
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
+		// second render pass: draw as normal
+		// ----------------------------------
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		model = glm::mat4(1.0f);
+		view = camera.GetViewMatrix();
+		shader.setMat4("view", view);
+
+		// cubes
+		glBindVertexArray(cubeVAO);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, cubeTexture);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		shader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		shader.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		// floor
+		glBindVertexArray(planeVAO);
+		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		shader.setMat4("model", glm::mat4(1.0f));
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glBindVertexArray(0);
+
+		// now draw the mirror quad with screen texture
+		// --------------------------------------------
+		glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+
+		screenShader.use();
+		glBindVertexArray(quadVAO);
+		glBindTexture(GL_TEXTURE_2D, textureColorbuffer);	// use the color attachment texture as the texture of the quad plane
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+		//// render
+		//// ------
+		//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); // don't forget to clear the stencil buffer!
+
+		//// set uniforms
+		//shaderSingleColor.use();
+		//glm::mat4 model = glm::mat4(1.0f);
+		//glm::mat4 view = camera.GetViewMatrix();
+		//glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+		//shaderSingleColor.setMat4("view", view);
+		//shaderSingleColor.setMat4("projection", projection);
+
+		//shader.use();
+		//shader.setMat4("view", view);
+		//shader.setMat4("projection", projection);
+
+		//// draw floor as normal, but don't write the floor to the stencil buffer, we only care about the containers. We set its mask to 0x00 to not write to the stencil buffer.
+		//glStencilMask(0x00);
+		//// floor
+		//glBindVertexArray(planeVAO);
+		//glBindTexture(GL_TEXTURE_2D, floorTexture);
+		//shader.setMat4("model", glm::mat4(1.0f));
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		//glBindVertexArray(0);
+
+
+
+		//// 1st. render pass, draw objects as normal, writing to the stencil buffer
+		//// --------------------------------------------------------------------
+		//glStencilFunc(GL_ALWAYS, 1, 0xFF); // all fragments should pass stencil
+		//glStencilMask(0xFF); // enable writing to stencil buffer
+		//// cubes
+		//glBindVertexArray(cubeVAO);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, cubeTexture);
+		//model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		//shader.setMat4("model", model);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+		//model = glm::mat4(1.0f);
+		//model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		//shader.setMat4("model", model);
+		//glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		// //grass
+		//std::map<float, glm::vec3> sorted;
+		//for (unsigned int i = 0; i < transparents.size(); i++)
+		//{
+		//	float distance = glm::length(camera.Position - transparents[i]);
+		//	sorted[distance] = transparents[i];
+		//}
+		//
+		//glBindVertexArray(transparentVAO);
+		//glBindTexture(GL_TEXTURE_2D, windowTexture);
+		//for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
+		//{
+		//	model = glm::mat4(1.0f);
+		//	model = glm::translate(model, it->second);
+		//	shader.setMat4("model", model);
+		//	glDrawArrays(GL_TRIANGLES, 0, 6);
+		//}
 
 
 		// 2nd. render pass: now draw slightly scaled versions of the objects, this time disabling stencil writing.

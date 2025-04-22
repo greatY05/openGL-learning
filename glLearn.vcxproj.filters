@@ -19,6 +19,12 @@
     <Filter Include="shaders\stencil">
       <UniqueIdentifier>{18e8db7f-cd1d-4520-9c71-4085794eea86}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\normalShaders">
+      <UniqueIdentifier>{ff9be0f5-4fff-43a6-bef2-889b280e7adc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\shader.">
+      <UniqueIdentifier>{99971ebf-a02f-4792-b090-c2c4e0eaee79}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -64,14 +70,8 @@
     <None Include="vertLight.vs">
       <Filter>shaders</Filter>
     </None>
-    <None Include="fragLightSource.fss">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="vertLightCube.vs" />
     <None Include="modelFrag.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="modelVert.vs">
       <Filter>shaders</Filter>
     </None>
     <None Include="stencilFrag.frag">
@@ -79,6 +79,18 @@
     </None>
     <None Include="stencilVert.vs">
       <Filter>shaders\stencil</Filter>
+    </None>
+    <None Include="normal.frag">
+      <Filter>shaders\normalShaders</Filter>
+    </None>
+    <None Include="normal.vs">
+      <Filter>shaders\normalShaders</Filter>
+    </None>
+    <None Include="shader.frag">
+      <Filter>shaders\shader.</Filter>
+    </None>
+    <None Include="shader.vs">
+      <Filter>shaders\shader.</Filter>
     </None>
   </ItemGroup>
 </Project>

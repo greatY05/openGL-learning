@@ -16,10 +16,10 @@ float LinearizeDepth(float depth){ // we transform the non linear depth buffer t
 
 void main()
 {    
-    float depth = LinearizeDepth(gl_FragCoord.z) / far;
+    //float depth = LinearizeDepth(gl_FragCoord.z) / far;
     //FragColor = vec4(vec3(depth), 1.0);
-    FragColor = mix(vec4(0.2,0.2,0.2, 1.0),  vec4(vec3(depth), 0.0), 0.8);
-
+    //FragColor = mix(vec4(0.2,0.2,0.2, 1.0),  vec4(vec3(depth), 0.0), 0.8);
+    FragColor = texture(texture1, TexCoords);
 
 }
 

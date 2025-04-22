@@ -159,10 +159,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fragLight.fss" />
-    <None Include="fragLightSource.fss" />
+    <None Include="normal.frag" />
     <None Include="fragment.fss" />
     <None Include="modelFrag.frag" />
-    <None Include="modelVert.vs" />
+    <None Include="normal.vs" />
+    <None Include="shader.frag" />
+    <None Include="shader.vs" />
     <None Include="stencilFrag.frag" />
     <None Include="stencilVert.vs" />
     <None Include="vertex.vs" />
