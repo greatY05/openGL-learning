@@ -165,6 +165,8 @@
     <None Include="normal.vs" />
     <None Include="shader.frag" />
     <None Include="shader.vs" />
+    <None Include="skybox.frag" />
+    <None Include="skybox.vs" />
     <None Include="stencilFrag.frag" />
     <None Include="stencilVert.vs" />
     <None Include="vertex.vs" />

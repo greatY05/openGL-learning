@@ -25,6 +25,9 @@
     <Filter Include="shaders\shader.">
       <UniqueIdentifier>{99971ebf-a02f-4792-b090-c2c4e0eaee79}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\skybox">
+      <UniqueIdentifier>{93388e42-626e-498f-8827-1d2bd460f8a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -70,7 +73,6 @@
     <None Include="vertLight.vs">
       <Filter>shaders</Filter>
     </None>
-    <None Include="vertLightCube.vs" />
     <None Include="modelFrag.frag">
       <Filter>shaders</Filter>
     </None>
@@ -91,6 +93,15 @@
     </None>
     <None Include="shader.vs">
       <Filter>shaders\shader.</Filter>
+    </None>
+    <None Include="skybox.vs">
+      <Filter>shaders\skybox</Filter>
+    </None>
+    <None Include="vertLightCube.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="skybox.frag">
+      <Filter>shaders\skybox</Filter>
     </None>
   </ItemGroup>
 </Project>
