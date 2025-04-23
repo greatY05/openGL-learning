@@ -159,47 +159,48 @@ int main() {
 	};
 	//vertex data
 	float cubeVertices[] = {
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+		// positions         
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
 
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
 
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f, -0.5f,
 
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
 	};
 
 	float planeVertices[] = {
@@ -242,6 +243,42 @@ int main() {
 		 1.0f, -1.0f,  1.0f, 0.0f,
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
+
+	//creating 4 blocks with 4 different shaders but same vertex shader:
+	Shader shaderRed("shader.vs", "default.frag");
+	Shader shaderGreen("shader.vs", "default.frag");
+	Shader shaderYellow ("shader.vs", "default.frag");
+	Shader shaderBlue("shader.vs", "default.frag");
+	unsigned int uniformBlockIndexRed = glGetUniformBlockIndex(shaderRed.ID, "Matrices");
+	unsigned int uniformBlockIndexGreen = glGetUniformBlockIndex(shaderGreen.ID, "Matrices");
+	unsigned int uniformBlockIndexBlue = glGetUniformBlockIndex(shaderBlue.ID, "Matrices");
+	unsigned int uniformBlockIndexYellow = glGetUniformBlockIndex(shaderYellow.ID, "Matrices");
+
+	glUniformBlockBinding(shaderRed.ID, uniformBlockIndexRed, 0);
+	glUniformBlockBinding(shaderGreen.ID, uniformBlockIndexGreen, 0);
+	glUniformBlockBinding(shaderBlue.ID, uniformBlockIndexBlue, 0);
+	glUniformBlockBinding(shaderYellow.ID, uniformBlockIndexYellow, 0);
+
+	//create the ubos (uniform buffers) and bind them to point 1
+	unsigned int uboMatrices;
+	glGenBuffers(1, &uboMatrices);
+
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_STATIC_DRAW); //allocate memory for our buffers (2 mat4 buffers)
+	glBindBuffer(GL_UNIFORM_BUFFER, 0); // link the entire buffer to point 0
+
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, uboMatrices, 0, 2 * sizeof(glm::mat4));
+	//fill the buffer
+
+	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
+	glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(projection));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	//we store the first half of the uniform buffer here (projection) since we only update it once, we will store hte second one in the render loop
+
+
+
+
 
 	// 1. create and bind a framebuffer 2. create the texture image we're gonna draw and keep data uninitialized 3. create renderbuffer for both depth and stencil buffers
 	// 4. attach renderbuffer to the framebuffer 5. if statement check to see if framebuffer successful complete 7. unbind the framebuffer 
@@ -307,10 +344,7 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cubeVertices), &cubeVertices, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glBindVertexArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	// plane VAO
 	unsigned int planeVAO, planeVBO;
 	glGenVertexArrays(1, &planeVAO);
@@ -398,12 +432,43 @@ int main() {
 		shader.setMat4("projection", projection);
 		shader.setVec3("cameraPos", camera.Position);
 
+		//
+		glBindBuffer(GL_UNIFORM_BUFFER, uboMatrices);
+		glBufferSubData(GL_UNIFORM_BUFFER, sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(view));
+		glBindBuffer(GL_UNIFORM_BUFFER, 0);
+		//
+		// ^second part of uniform buffer we update the view here^
+		
+
 		// cubes
 		glBindVertexArray(cubeVAO);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, cubeTexture);
+		shaderRed.use();
+		 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.75f, 0.75f, 0.0f));	
+		shaderRed.setMat4("model", model);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
-		glBindVertexArray(0);
+		
+		glBindVertexArray(cubeVAO);
+		shaderBlue.use();
+		 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.75f, 0.75f, 0.0f));	
+		shaderRed.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glBindVertexArray(cubeVAO);
+		shaderYellow.use();
+		 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-0.75f, -0.75f, 0.0f));	
+		shaderRed.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
+		glBindVertexArray(cubeVAO);
+		shaderGreen.use();
+		 model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.75f, -0.75f, 0.0f));	
+		shaderRed.setMat4("model", model);
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+
 
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -1530,3 +1595,50 @@ glEnableVertexAttribArray(2);*/
 
 	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
 	//glEnableVertexAttribArray(0);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//gl_PointSize: draws a point on screen, we set its size, if we set its size to the clip spaces z for example, it will get biggere the further we're from it
+//gl_VertexID: an In variable for hte vertex shader that we can use to index which vertex we're working on
+//gl_FragCoord: contains the window-relative coordinates of the current fragment
+//gl_FrontFacing: figures out if face is front facing in face culling, we can use to draw different textures/stuff if fragment is front facing or not
+//gl_FragDepth: variable that we can manually set depth with, but not as perfermant due to early depth testing
+//      we can use detph<condition> we can specify a specific range to write to 
+//interface blocks (out{} or in{} ): similar to a struct, only with in and out instead of types (accessed with "interface.value")
+//uniform buffer objects: create with GL_UNIFORM_BUFFER, we layout them in a uniform block {}; for example can be used to store projection and view togehter
+//-uniform block layout-: what if we want to know the size of variables in uniform shader? we have to take into account their size in bytes and offset from start of block
+//      we can use the std140 layout, which explicitly states the memory layout for each variable type by standardizing their respective offsets 
+//		the aligned offset of a variable must be equal to a multiple of its base alignment 
+//		eg: 1.float - base alignment 4, 2.aligned offset 0, 3.vec3 - base alignment 16, 4.aligned offset 16, mat4 -base 16 aligned offset 32 (by column)... ...9.bool - base 4, offset 148
+//		not the most efficient, but garuntees memo0ry stays organized
+//using uniform buffers: we set them up similar to other buffers: gen with glGenBuffers, bind with glBindBuffer, then glBufferData with num of bytes in memory
+//		multiple uniforms can sit on hte same binding if they share the same data in the binded buffer (for example 2 shaders have uniform Matrices, both binded to the same  bind
+//		to set a uniform block to a specific bind/binding point, we use glUniformBlockBinding. example of setting a uniform to a bind/binding point:
+//		unsigned int lights_index = glGetUniformBlockIndex(shaderA.ID, "Lights");   
+//		glUniformBlockBinding(shaderA.ID, lights_index, 2);
+//		binding buffer object ot the same binding point:
+//		glBindBufferBase(GL_UNIFORM_BUFFER, 2, uboExampleBlock);
+//		and we finish by adding the data with glBufferSubData

@@ -103,5 +103,6 @@
     <None Include="skybox.frag">
       <Filter>shaders\skybox</Filter>
     </None>
+    <None Include="default.frag" />
   </ItemGroup>
 </Project>
