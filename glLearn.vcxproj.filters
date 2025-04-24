@@ -112,7 +112,7 @@
     <None Include="geometryShader.gs">
       <Filter>shaders</Filter>
     </None>
-    <None Include="vertexNromal.vs">
+    <None Include="vertexNormal.vs">
       <Filter>shaders</Filter>
     </None>
     <None Include="normalGeo.gs">

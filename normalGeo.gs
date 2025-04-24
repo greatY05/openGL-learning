@@ -1,20 +1,30 @@
 
 
 #version 330 core
-layout (location = 0) in vec3 aPos;
-layout (location = 2) in vec2 aNormal;
+layout (triangles) in;
+layout (line_strip, max_vertices = 6) out;
 
-out VS_OUT {
-    vec2 normal;
-} vs_out;
+in VS_OUT {
+    vec3 normal;
+} gs_in[];
 
-uniform mat4 view;
-uniform mat4 model;
+const float MAGNITUDE = 0.2;
+
+uniform mat4 projection;
+
+void GenerateLine(int index)
+{
+    gl_Position = projection * gl_in[index].gl_Position;
+    EmitVertex();
+    gl_Position = projection * (gl_in[index].gl_Position + vec4(gs_in[index].normal, 0.0) * MAGNITUDE);
+    EmitVertex();
+    EndPrimitive();
+}
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(aPos, 1.0); 
-    mat3 normalMatrix = mat3(transpose(inverse(view * model)));
-    vs_out.normal = normalize(vec3(vec4(normalMatrix  * aNormal, 0.0)));
+    GenerateLine(0); // first vertex normal
+    GenerateLine(1); // second vertex normal
+    GenerateLine(2); // third vertex normal
 }
 

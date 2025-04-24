@@ -89,26 +89,12 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 
 
-	float points[] = {
-		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // top-left
-		 0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top-right
-		 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom-right
-		-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // bottom-left
-	};
-	unsigned int VBO, VAO;
-	glGenBuffers(1, &VBO);
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points), &points, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
-	glBindVertexArray(0);
-	Shader pointsShader("simpleVert.vs", "default.frag", "geometryShader.gs");
+
+	Shader pointsShader("simpleVert.vs", "default.frag");
+	Shader normalShader("vertexNormal.vs", "normalFragG.frag", "normalGeo.gs");
 
 	//
+	stbi_set_flip_vertically_on_load(true);
 	Model backpack("backpack/backpack.obj");
 
 	// render loop
@@ -139,11 +125,15 @@ int main() {
 		pointsShader.setMat4("projection", projection);
 		pointsShader.setMat4("view", view);
 		pointsShader.setMat4("model", model);
-		pointsShader.setFloat("time", static_cast<float>(glfwGetTime()));
 		
 		backpack.Draw(pointsShader);
 
-
+		normalShader.use();
+		normalShader.setMat4("projection", projection);
+		normalShader.setMat4("view", view);
+		normalShader.setMat4("model", model);
+		
+		backpack.Draw(normalShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
