@@ -103,6 +103,23 @@
     <None Include="skybox.frag">
       <Filter>shaders\skybox</Filter>
     </None>
-    <None Include="default.frag" />
+    <None Include="default.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="simpleVert.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="geometryShader.gs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="vertexNromal.vs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="normalGeo.gs">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="normalFragG.frag">
+      <Filter>shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

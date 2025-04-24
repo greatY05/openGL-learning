@@ -160,12 +160,17 @@
   <ItemGroup>
     <None Include="default.frag" />
     <None Include="fragLight.fss" />
+    <None Include="geometryShader.gs" />
     <None Include="normal.frag" />
     <None Include="fragment.fss" />
     <None Include="modelFrag.frag" />
     <None Include="normal.vs" />
+    <None Include="normalFragG.frag" />
+    <None Include="normalGeo.gs" />
+    <None Include="vertexNromal.vs" />
     <None Include="shader.frag" />
     <None Include="shader.vs" />
+    <None Include="simpleVert.vs" />
     <None Include="skybox.frag" />
     <None Include="skybox.vs" />
     <None Include="stencilFrag.frag" />
