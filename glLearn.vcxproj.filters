@@ -28,6 +28,12 @@
     <Filter Include="shaders\skybox">
       <UniqueIdentifier>{93388e42-626e-498f-8827-1d2bd460f8a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\antialiasing">
+      <UniqueIdentifier>{72aecad4-677c-47c1-99c6-f7985b20b5a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders\instancing">
+      <UniqueIdentifier>{3c527f37-a22c-4f23-9caa-a4de07ab2941}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -103,12 +109,6 @@
     <None Include="skybox.frag">
       <Filter>shaders\skybox</Filter>
     </None>
-    <None Include="default.frag">
-      <Filter>shaders</Filter>
-    </None>
-    <None Include="simpleVert.vs">
-      <Filter>shaders</Filter>
-    </None>
     <None Include="geometryShader.gs">
       <Filter>shaders</Filter>
     </None>
@@ -120,6 +120,21 @@
     </None>
     <None Include="normalFragG.frag">
       <Filter>shaders</Filter>
+    </None>
+    <None Include="anti.vs">
+      <Filter>shaders\antialiasing</Filter>
+    </None>
+    <None Include="anti.frag">
+      <Filter>shaders\antialiasing</Filter>
+    </None>
+    <None Include="simpleVert.vs">
+      <Filter>shaders\instancing</Filter>
+    </None>
+    <None Include="default.frag">
+      <Filter>shaders\instancing</Filter>
+    </None>
+    <None Include="antiScreen.frag">
+      <Filter>shaders\antialiasing</Filter>
     </None>
   </ItemGroup>
 </Project>
