@@ -34,6 +34,9 @@
     <Filter Include="shaders\instancing">
       <UniqueIdentifier>{3c527f37-a22c-4f23-9caa-a4de07ab2941}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\blinnphong">
+      <UniqueIdentifier>{632114c2-e124-4c14-9c67-843977e25598}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -135,6 +138,12 @@
     </None>
     <None Include="antiScreen.frag">
       <Filter>shaders\antialiasing</Filter>
+    </None>
+    <None Include="blinn.frag">
+      <Filter>shaders\blinnphong</Filter>
+    </None>
+    <None Include="blinn.vs">
+      <Filter>shaders\blinnphong</Filter>
     </None>
   </ItemGroup>
 </Project>

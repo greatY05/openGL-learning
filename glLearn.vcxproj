@@ -161,6 +161,8 @@
     <None Include="anti.frag" />
     <None Include="anti.vs" />
     <None Include="antiScreen.frag" />
+    <None Include="blinn.frag" />
+    <None Include="blinn.vs" />
     <None Include="default.frag" />
     <None Include="fragLight.fss" />
     <None Include="geometryShader.gs" />
