@@ -37,6 +37,9 @@
     <Filter Include="shaders\blinnphong">
       <UniqueIdentifier>{632114c2-e124-4c14-9c67-843977e25598}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\shadowMapping">
+      <UniqueIdentifier>{749d4687-e55f-48d8-9d2c-b982be9faa59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -144,6 +147,22 @@
     </None>
     <None Include="blinn.vs">
       <Filter>shaders\blinnphong</Filter>
+    </None>
+    <None Include="shadowMap.frag">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="shadowMap.vs">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="debugShadowMap.frag">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="debugShadowMap.vs">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="camShader.vs" />
+    <None Include="camShader.frag">
+      <Filter>shaders\shadowMapping</Filter>
     </None>
   </ItemGroup>
 </Project>

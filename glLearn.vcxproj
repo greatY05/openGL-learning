@@ -163,6 +163,10 @@
     <None Include="antiScreen.frag" />
     <None Include="blinn.frag" />
     <None Include="blinn.vs" />
+    <None Include="camShader.frag" />
+    <None Include="camShader.vs" />
+    <None Include="debugShadowMap.frag" />
+    <None Include="debugShadowMap.vs" />
     <None Include="default.frag" />
     <None Include="fragLight.fss" />
     <None Include="geometryShader.gs" />
@@ -172,6 +176,8 @@
     <None Include="normal.vs" />
     <None Include="normalFragG.frag" />
     <None Include="normalGeo.gs" />
+    <None Include="shadowMap.frag" />
+    <None Include="shadowMap.vs" />
     <None Include="vertexNormal.vs" />
     <None Include="shader.frag" />
     <None Include="shader.vs" />
