@@ -30,7 +30,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffsett, double yoffset);
 //ttexture loader
-unsigned int loadTexture(const char* path);
+unsigned int loadTexture(const char* path, bool gammaCorrection);
 unsigned int loadCubemap(vector<std::string> faces);
 
 //camera position stuff
@@ -38,7 +38,8 @@ Camera camera(glm::vec3(0.0f, 0.0f, 5.0f));
 bool firstMove = true;
 bool blinn = false;
 bool blinnKeyPressed = false;
-
+bool gammaEnabled = true;
+bool gammaKeyPressed = false;
 //delta time!!!!
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
@@ -125,13 +126,24 @@ int main() {
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 	glBindVertexArray(0);
 
-	unsigned int floorTexture = loadTexture("marble.jpg");
+	unsigned int floorTexture = loadTexture("marble.jpg", false);
+	unsigned int floorTextureGammaCorrected = loadTexture("marble.jpg", true);
 
 	shader.use();
 	shader.setInt("texture1", 0);
 
-	glm::vec3 lightPos(0.0f, 0.0f, 0.0f);
-
+	glm::vec3 lightPositions[] = {
+		glm::vec3(-3.0f, 0.0f, 0.0f),
+		glm::vec3(-1.0f, 0.0f, 0.0f),
+		glm::vec3(1.0f, 0.0f, 0.0f),
+		glm::vec3(3.0f, 0.0f, 0.0f)
+	};
+	glm::vec3 lightColors[] = {
+		glm::vec3(0.25),
+		glm::vec3(0.50),
+		glm::vec3(0.75),
+		glm::vec3(1.00)
+	};
 	// render loop
 	// -----------
 	
@@ -154,26 +166,24 @@ int main() {
 		// -----
 		
 		
-				// draw objects
+		// draw objects
 		shader.use();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)WIDTH / (float)HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("projection", projection);
 		shader.setMat4("view", view);
 		// set light uniforms
+		glUniform3fv(glGetUniformLocation(shader.ID, "lightPositions"), 4, &lightPositions[0][0]);
+		glUniform3fv(glGetUniformLocation(shader.ID, "lightColors"), 4, &lightColors[0][0]);
 		shader.setVec3("viewPos", camera.Position);
-		shader.setVec3("lightPos", lightPos);
-		shader.setInt("blinn", blinn);
+		shader.setInt("gamma", gammaEnabled);
 		// floor
 		glBindVertexArray(planeVAO);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, floorTexture);
+		glBindTexture(GL_TEXTURE_2D, gammaEnabled ? floorTextureGammaCorrected : floorTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		std::cout << (blinn ? "Blinn-Phong" : "Phong") << std::endl;
-
-
-
+		std::cout << (gammaEnabled ? "Gamma enabled" : "Gamma disabled") << std::endl;
 	
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -245,6 +255,16 @@ void processInput(GLFWwindow* window) {
 	{
 		blinnKeyPressed = false;
 	}
+
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !gammaKeyPressed)
+	{
+		gammaEnabled = !gammaEnabled;
+		gammaKeyPressed = true;
+	}
+	if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE)
+	{
+		gammaKeyPressed = false;
+	}
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -289,7 +309,7 @@ void framebuffer_size_callback(GLFWwindow* widnow, int WIDTH, int HEIGHT) {
 }
 
 
-unsigned int loadTexture(char const* path)
+unsigned int loadTexture(char const* path, bool gammaCorrection)
 {
 	unsigned int textureID;
 	glGenTextures(1, &textureID);
@@ -298,20 +318,28 @@ unsigned int loadTexture(char const* path)
 	unsigned char* data = stbi_load(path, &width, &height, &nrComponents, 0);
 	if (data)
 	{
-		GLenum format;
+		GLenum dataFormat;
+		GLenum internalFormat;
 		if (nrComponents == 1)
-			format = GL_RED;
+		{
+			internalFormat = dataFormat = GL_RED;
+		}
 		else if (nrComponents == 3)
-			format = GL_RGB;
-		else if (nrComponents == 4)
-			format = GL_RGBA;
-
+		{
+			internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+			dataFormat = GL_RGB;
+		}
+		else if (nrComponents == 4) 
+		{
+			internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+			dataFormat = GL_RGBA;
+		}
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, format == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, internalFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, internalFormat == GL_RGBA ? GL_CLAMP_TO_EDGE : GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
