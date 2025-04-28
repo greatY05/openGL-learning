@@ -164,5 +164,11 @@
     <None Include="camShader.frag">
       <Filter>shaders\shadowMapping</Filter>
     </None>
+    <None Include="shadowMap.gs">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="camShader2.frag">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
   </ItemGroup>
 </Project>

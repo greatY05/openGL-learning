@@ -177,7 +177,9 @@
     <None Include="normalFragG.frag" />
     <None Include="normalGeo.gs" />
     <None Include="shadowMap.frag" />
+    <None Include="shadowMap.gs" />
     <None Include="shadowMap.vs" />
+    <None Include="camShader2.frag" />
     <None Include="vertexNormal.vs" />
     <None Include="shader.frag" />
     <None Include="shader.vs" />
