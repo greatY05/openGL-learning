@@ -181,5 +181,11 @@
     <None Include="camShader.vs">
       <Filter>shaders\shadowMapping</Filter>
     </None>
+    <None Include="parallaxMap.frag">
+      <Filter>shaders\normalMap</Filter>
+    </None>
+    <None Include="parallaxMap.vs">
+      <Filter>shaders\normalMap</Filter>
+    </None>
   </ItemGroup>
 </Project>

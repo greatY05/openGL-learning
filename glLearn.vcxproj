@@ -178,6 +178,8 @@
     <None Include="normalGeo.gs" />
     <None Include="normalMap.frag" />
     <None Include="normalMap.vs" />
+    <None Include="parallaxMap.vs" />
+    <None Include="parallaxMap.frag" />
     <None Include="shadowMap.frag" />
     <None Include="shadowMap.gs" />
     <None Include="shadowMap.vs" />

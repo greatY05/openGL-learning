@@ -107,10 +107,11 @@ int main() {
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-	Shader shader("normalMap.vs", "normalMap.frag");
+	Shader shader("parallaxMap.vs", "parallaxMap.frag");
 
-	unsigned int diffuseMap = loadTexture("brickwall.jpg", true);
-	unsigned int normalMap = loadTexture("brickwall_normal.jpg", true);
+	unsigned int diffuseMap = loadTexture("bricks2.jpg", false);
+	unsigned int normalMap = loadTexture("bricks2_normal.jpg", false);
+	unsigned int parallaxMap = loadTexture("bricks2_disp.jpg", true);
 
 	// render loop
 	// -----------
@@ -118,9 +119,10 @@ int main() {
 	shader.use();
 	shader.setInt("diffuseMap", 0);
 	shader.setInt("normalMap", 1);
+	shader.setInt("depthMap", 2);
 
-	glm::vec3 lightPos(0.5f, 1.0f, 0.3f);
-
+	glm::vec3 lightPos(0.1f, 1.0f, 0.3f);
+	float heightScale = 0.1f;
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	while (!glfwWindowShouldClose(window))
@@ -148,10 +150,13 @@ int main() {
 		shader.setMat4("model", model);
 		shader.setVec3("viewPos", camera.Position);
 		shader.setVec3("lightPos", lightPos);
+		shader.setFloat("heightScale", heightScale);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, diffuseMap);
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, normalMap);
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, parallaxMap);
 		renderQuad();
 
 		//render light sourece (simply render smaller plane at the lights position for debugging)
