@@ -40,6 +40,9 @@
     <Filter Include="shaders\shadowMapping">
       <UniqueIdentifier>{749d4687-e55f-48d8-9d2c-b982be9faa59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\normalMap">
+      <UniqueIdentifier>{21c4bb42-fe87-4830-9f4a-26f98cceb851}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -160,7 +163,6 @@
     <None Include="debugShadowMap.vs">
       <Filter>shaders\shadowMapping</Filter>
     </None>
-    <None Include="camShader.vs" />
     <None Include="camShader.frag">
       <Filter>shaders\shadowMapping</Filter>
     </None>
@@ -168,6 +170,15 @@
       <Filter>shaders\shadowMapping</Filter>
     </None>
     <None Include="camShader2.frag">
+      <Filter>shaders\shadowMapping</Filter>
+    </None>
+    <None Include="normalMap.vs">
+      <Filter>shaders\normalMap</Filter>
+    </None>
+    <None Include="normalMap.frag">
+      <Filter>shaders\normalMap</Filter>
+    </None>
+    <None Include="camShader.vs">
       <Filter>shaders\shadowMapping</Filter>
     </None>
   </ItemGroup>
