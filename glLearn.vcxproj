@@ -170,6 +170,10 @@
     <None Include="default.frag" />
     <None Include="fragLight.fss" />
     <None Include="geometryShader.gs" />
+    <None Include="hdr.frag" />
+    <None Include="hdr.vs" />
+    <None Include="lightinghdr.frag" />
+    <None Include="lightinghdr.vs" />
     <None Include="normal.frag" />
     <None Include="fragment.fss" />
     <None Include="modelFrag.frag" />

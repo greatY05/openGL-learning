@@ -43,6 +43,9 @@
     <Filter Include="shaders\normalMap">
       <UniqueIdentifier>{21c4bb42-fe87-4830-9f4a-26f98cceb851}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\hdr">
+      <UniqueIdentifier>{5b8b1789-ce11-41d4-9a18-6acd3fd29419}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -186,6 +189,18 @@
     </None>
     <None Include="parallaxMap.vs">
       <Filter>shaders\normalMap</Filter>
+    </None>
+    <None Include="hdr.vs">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="hdr.frag">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="lightinghdr.frag">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="lightinghdr.vs">
+      <Filter>shaders\hdr</Filter>
     </None>
   </ItemGroup>
 </Project>
