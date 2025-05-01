@@ -202,5 +202,20 @@
     <None Include="lightinghdr.vs">
       <Filter>shaders\hdr</Filter>
     </None>
+    <None Include="lightBox.frag">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="blur.frag">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="blur.vs">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="bloomFinal.frag">
+      <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="bloomFinal.vs">
+      <Filter>shaders\hdr</Filter>
+    </None>
   </ItemGroup>
 </Project>

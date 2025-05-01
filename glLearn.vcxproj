@@ -163,6 +163,10 @@
     <None Include="antiScreen.frag" />
     <None Include="blinn.frag" />
     <None Include="blinn.vs" />
+    <None Include="bloomFinal.frag" />
+    <None Include="bloomFinal.vs" />
+    <None Include="blur.frag" />
+    <None Include="blur.vs" />
     <None Include="camShader.frag" />
     <None Include="camShader.vs" />
     <None Include="debugShadowMap.frag" />
@@ -172,6 +176,7 @@
     <None Include="geometryShader.gs" />
     <None Include="hdr.frag" />
     <None Include="hdr.vs" />
+    <None Include="lightBox.frag" />
     <None Include="lightinghdr.frag" />
     <None Include="lightinghdr.vs" />
     <None Include="normal.frag" />
