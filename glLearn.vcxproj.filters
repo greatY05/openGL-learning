@@ -46,6 +46,9 @@
     <Filter Include="shaders\hdr">
       <UniqueIdentifier>{5b8b1789-ce11-41d4-9a18-6acd3fd29419}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\deferred">
+      <UniqueIdentifier>{cfa989d2-fcb1-493c-b766-85a870ed2eec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -216,6 +219,24 @@
     </None>
     <None Include="bloomFinal.vs">
       <Filter>shaders\hdr</Filter>
+    </None>
+    <None Include="deferredLightBox.frag">
+      <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="deferredLightBox.vs">
+      <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="deferredShading.frag">
+      <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="deferredShading.vs">
+      <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="gbuffer.frag">
+      <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="gbuffer.vs">
+      <Filter>shaders\deferred</Filter>
     </None>
   </ItemGroup>
 </Project>
