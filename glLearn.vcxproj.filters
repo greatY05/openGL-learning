@@ -49,6 +49,9 @@
     <Filter Include="shaders\deferred">
       <UniqueIdentifier>{cfa989d2-fcb1-493c-b766-85a870ed2eec}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\ssao">
+      <UniqueIdentifier>{f1dc37f6-aaad-4697-9d9d-4d3a403301a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -237,6 +240,24 @@
     </None>
     <None Include="gbuffer.vs">
       <Filter>shaders\deferred</Filter>
+    </None>
+    <None Include="ssao.frag">
+      <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="ssao.vs">
+      <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="ssaoBlur.frag">
+      <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="ssaoGeometry.frag">
+      <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="ssaoGeometry.vs">
+      <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="ssaoLighting.frag">
+      <Filter>shaders\ssao</Filter>
     </None>
   </ItemGroup>
 </Project>

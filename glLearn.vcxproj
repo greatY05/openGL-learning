@@ -199,6 +199,12 @@
     <None Include="shadowMap.gs" />
     <None Include="shadowMap.vs" />
     <None Include="camShader2.frag" />
+    <None Include="ssao.frag" />
+    <None Include="ssao.vs" />
+    <None Include="ssaoBlur.frag" />
+    <None Include="ssaoGeometry.frag" />
+    <None Include="ssaoGeometry.vs" />
+    <None Include="ssaoLighting.frag" />
     <None Include="vertexNormal.vs" />
     <None Include="shader.frag" />
     <None Include="shader.vs" />
