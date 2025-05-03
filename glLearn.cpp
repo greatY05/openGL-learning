@@ -103,7 +103,7 @@ int main() {
 	}
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
+
 	stbi_set_flip_vertically_on_load(true);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -113,7 +113,10 @@ int main() {
 	Shader shaderSSAO("ssao.vs", "ssao.frag");
 	Shader shaderSSAOBlur("ssao.vs", "ssaoBlur.frag");
 	
-	
+	//fuck dfude...
+	// 
+	// 
+	// 
 	// load models
 // -----------
 	Model backpack("backpack/backpack.obj");
