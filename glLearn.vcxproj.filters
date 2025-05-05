@@ -52,6 +52,9 @@
     <Filter Include="shaders\ssao">
       <UniqueIdentifier>{f1dc37f6-aaad-4697-9d9d-4d3a403301a7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\pbr">
+      <UniqueIdentifier>{784df674-08ae-4857-a9f1-6f38066c26ca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -258,6 +261,12 @@
     </None>
     <None Include="ssaoLighting.frag">
       <Filter>shaders\ssao</Filter>
+    </None>
+    <None Include="pbr.frag">
+      <Filter>shaders\pbr</Filter>
+    </None>
+    <None Include="pbr.vs">
+      <Filter>shaders\pbr</Filter>
     </None>
   </ItemGroup>
 </Project>
