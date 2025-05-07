@@ -161,6 +161,8 @@
     <None Include="anti.frag" />
     <None Include="anti.vs" />
     <None Include="antiScreen.frag" />
+    <None Include="background.frag" />
+    <None Include="background.vs" />
     <None Include="blinn.frag" />
     <None Include="blinn.vs" />
     <None Include="bloomFinal.frag" />
@@ -169,6 +171,7 @@
     <None Include="blur.vs" />
     <None Include="camShader.frag" />
     <None Include="camShader.vs" />
+    <None Include="cubemap.vs" />
     <None Include="debugShadowMap.frag" />
     <None Include="debugShadowMap.vs" />
     <None Include="default.frag" />
@@ -176,12 +179,14 @@
     <None Include="deferredLightBox.vs" />
     <None Include="deferredShading.frag" />
     <None Include="deferredShading.vs" />
+    <None Include="equirectangularToCubemap.frag" />
     <None Include="fragLight.fss" />
     <None Include="gbuffer.frag" />
     <None Include="gbuffer.vs" />
     <None Include="geometryShader.gs" />
     <None Include="hdr.frag" />
     <None Include="hdr.vs" />
+    <None Include="irradianceConvolution.frag" />
     <None Include="lightBox.frag" />
     <None Include="lightinghdr.frag" />
     <None Include="lightinghdr.vs" />

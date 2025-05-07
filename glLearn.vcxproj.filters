@@ -55,6 +55,9 @@
     <Filter Include="shaders\pbr">
       <UniqueIdentifier>{784df674-08ae-4857-a9f1-6f38066c26ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shaders\pbr\ibl">
+      <UniqueIdentifier>{ea8f2c61-a7b0-45fa-a253-cf90710c419b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glLearn.cpp">
@@ -267,6 +270,21 @@
     </None>
     <None Include="pbr.vs">
       <Filter>shaders\pbr</Filter>
+    </None>
+    <None Include="background.frag">
+      <Filter>shaders\pbr\ibl</Filter>
+    </None>
+    <None Include="background.vs">
+      <Filter>shaders\pbr\ibl</Filter>
+    </None>
+    <None Include="cubemap.vs">
+      <Filter>shaders\pbr\ibl</Filter>
+    </None>
+    <None Include="equirectangularToCubemap.frag">
+      <Filter>shaders\pbr\ibl</Filter>
+    </None>
+    <None Include="irradianceConvolution.frag">
+      <Filter>shaders\pbr\ibl</Filter>
     </None>
   </ItemGroup>
 </Project>
